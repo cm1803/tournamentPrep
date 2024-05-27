@@ -15,6 +15,12 @@ function getUserData() {
     return JSON.parse(localStorage.getItem('users')) || {};
 }
 
+// Logout
+function logout() {
+    localStorage.removeItem('currentUser');
+    showSection('login-section');
+}
+
 // Login and Registration
 document.getElementById('login-form').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -76,6 +82,8 @@ document.getElementById('tournament-form').addEventListener('submit', function (
     showSection('home-section');
     loadHomePage();
 });
+
+document.getElementById('logout-button').addEventListener('click', logout);
 
 function loadHomePage() {
     const currentUser = localStorage.getItem('currentUser');
