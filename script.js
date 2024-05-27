@@ -8,11 +8,11 @@ function showSection(sectionId) {
 
 // User data storage (for simplicity, using localStorage)
 function saveUserData(data) {
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('users', JSON.stringify(data));
 }
 
 function getUserData() {
-    return JSON.parse(localStorage.getItem('user'));
+    return JSON.parse(localStorage.getItem('users')) || {};
 }
 
 // Login and Registration
@@ -22,7 +22,8 @@ document.getElementById('login-form').addEventListener('submit', function (event
     const password = document.getElementById('password').value;
     const userData = getUserData();
 
-    if (userData && userData.username === username && userData.password === password) {
+    if (userData[username] && userData[username].password === password) {
+        localStorage.setItem('currentUser', username);
         showSection('home-section');
         loadHomePage();
     } else {
@@ -41,16 +42,22 @@ document.getElementById('register-form').addEventListener('submit', function (ev
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
 
-    const userData = {
-        username: newUsername,
-        password: newPassword,
-        firstName: firstName,
-        lastName: lastName,
-        tournament: null
-    };
+    const userData = getUserData();
+    if (userData[newUsername]) {
+        alert('Username already exists');
+    } else {
+        userData[newUsername] = {
+            username: newUsername,
+            password: newPassword,
+            firstName: firstName,
+            lastName: lastName,
+            tournament: null
+        };
 
-    saveUserData(userData);
-    showSection('tournament-section');
+        saveUserData(userData);
+        localStorage.setItem('currentUser', newUsername);
+        showSection('tournament-section');
+    }
 });
 
 document.getElementById('tournament-form').addEventListener('submit', function (event) {
@@ -58,8 +65,9 @@ document.getElementById('tournament-form').addEventListener('submit', function (
     const tournamentName = document.getElementById('tournament-name').value;
     const tournamentDate = document.getElementById('tournament-date').value;
 
-    let userData = getUserData();
-    userData.tournament = {
+    const currentUser = localStorage.getItem('currentUser');
+    const userData = getUserData();
+    userData[currentUser].tournament = {
         name: tournamentName,
         date: tournamentDate
     };
@@ -70,32 +78,37 @@ document.getElementById('tournament-form').addEventListener('submit', function (
 });
 
 function loadHomePage() {
+    const currentUser = localStorage.getItem('currentUser');
     const userData = getUserData();
-    document.getElementById('greeting').textContent = `Hi, ${userData.firstName}`;
+    const user = userData[currentUser];
+
+    document.getElementById('greeting').textContent = `Hi, ${user.firstName}`;
     updateCountdown();
 }
 
 function updateCountdown() {
+    const currentUser = localStorage.getItem('currentUser');
     const userData = getUserData();
-    const tournamentDate = new Date(userData.tournament.date);
+    const tournamentDate = new Date(userData[currentUser].tournament.date);
     const currentDate = new Date();
     const diffTime = Math.abs(tournamentDate - currentDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    document.getElementById('countdown').textContent = `${diffDays} days until ${userData.tournament.name}`;
+    document.getElementById('countdown').textContent = `${diffDays} days until ${userData[currentUser].tournament.name}`;
 }
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = localStorage.getItem('currentUser');
     const userData = getUserData();
 
-    if (userData) {
-        const tournamentDate = new Date(userData.tournament.date);
+    if (currentUser && userData[currentUser]) {
+        const tournamentDate = new Date(userData[currentUser].tournament.date);
         const currentDate = new Date();
         const diffTime = Math.abs(currentDate - tournamentDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (!userData.tournament || diffDays > 7) {
+        if (!userData[currentUser].tournament || diffDays > 7) {
             showSection('tournament-section');
         } else {
             showSection('home-section');
