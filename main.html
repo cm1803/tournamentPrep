@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jiu Jitsu Training Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-section">
+        <h1>Login</h1>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <button id="register-button">Register</button>
+    </div>
+
+    <div id="register-section" class="hidden">
+        <h1>Register</h1>
+        <form id="register-form">
+            <label for="new-username">Username:</label>
+            <input type="text" id="new-username" required>
+            <label for="new-password">Password:</label>
+            <input type="password" id="new-password" required>
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" required>
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div id="tournament-section" class="hidden">
+        <h1>New Tournament</h1>
+        <form id="tournament-form">
+            <label for="tournament-name">Tournament Name:</label>
+            <input type="text" id="tournament-name" required>
+            <label for="tournament-date">Tournament Date:</label>
+            <input type="date" id="tournament-date" required>
+            <button type="submit">Save Tournament</button>
+        </form>
+    </div>
+
+    <div id="home-section" class="hidden">
+        <h1 id="greeting"></h1>
+        <h2 id="countdown"></h2>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
