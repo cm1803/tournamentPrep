@@ -8,7 +8,7 @@ body {
     display: none;
 }
 
-#login-section, #register-section, #tournament-section, #home-section, #task-modal {
+#login-section, #register-section, #tournament-section, #home-section, #task-modal, #welcome-section {
     display: flex;
     flex-direction: column;
     align-items: center;
