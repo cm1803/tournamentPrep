@@ -134,4 +134,46 @@ function loadHomePage() {
     document.getElementById('greeting').textContent = `Hi, ${user.firstName}`;
     updateCountdown();
 
-    updateSection
+    updateSection('technical');
+    updateSection('mental');
+    updateSection('physical');
+    updateSection('diet');
+}
+
+function updateCountdown() {
+    const currentUser = localStorage.getItem('currentUser');
+    const userData = getUserData();
+    const tournamentDate = new Date(userData[currentUser].tournament.date);
+    const currentDate = new Date();
+    const diffTime = Math.abs(tournamentDate - currentDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    document.getElementById('countdown').textContent = `${diffDays} days until ${userData[currentUser].tournament.name}`;
+}
+
+function updateSection(section) {
+    const currentUser = localStorage.getItem('currentUser');
+    const userData = getUserData();
+    const tasks = userData[currentUser].sections[section];
+    const completedTasks = tasks.filter(task => task.completed).length;
+    const percentage = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
+
+    document.getElementById(`${section}-percentage`).textContent = `${percentage}%`;
+}
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = localStorage.getItem('currentUser');
+    const userData = getUserData();
+
+    if (currentUser && userData[currentUser]) {
+        if (userData[currentUser].tournament) {
+            showSection('home-section');
+            loadHomePage();
+        } else {
+            showSection('tournament-section');
+        }
+    } else {
+        showSection('login-section');
+    }
+});
