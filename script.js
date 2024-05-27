@@ -61,7 +61,13 @@ document.getElementById('register-form').addEventListener('submit', function (ev
             password: newPassword,
             firstName: firstName,
             lastName: lastName,
-            tournament: null
+            tournament: null,
+            sections: {
+                technical: [],
+                mental: [],
+                physical: [],
+                diet: []
+            }
         };
 
         saveUserData(userData);
@@ -89,6 +95,37 @@ document.getElementById('tournament-form').addEventListener('submit', function (
 
 document.getElementById('logout-button').addEventListener('click', logout);
 
+// Task management
+let currentSection = '';
+
+function openTaskModal(section) {
+    currentSection = section;
+    showSection('task-modal');
+}
+
+function closeTaskModal() {
+    currentSection = '';
+    showSection('home-section');
+}
+
+document.getElementById('task-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const taskName = document.getElementById('task-name').value;
+    const taskFrequency = document.getElementById('task-frequency').value;
+
+    const currentUser = localStorage.getItem('currentUser');
+    const userData = getUserData();
+    userData[currentUser].sections[currentSection].push({
+        name: taskName,
+        frequency: taskFrequency,
+        completed: false
+    });
+
+    saveUserData(userData);
+    closeTaskModal();
+    loadHomePage();
+});
+
 function loadHomePage() {
     const currentUser = localStorage.getItem('currentUser');
     const userData = getUserData();
@@ -96,32 +133,5 @@ function loadHomePage() {
 
     document.getElementById('greeting').textContent = `Hi, ${user.firstName}`;
     updateCountdown();
-}
 
-function updateCountdown() {
-    const currentUser = localStorage.getItem('currentUser');
-    const userData = getUserData();
-    const tournamentDate = new Date(userData[currentUser].tournament.date);
-    const currentDate = new Date();
-    const diffTime = Math.abs(tournamentDate - currentDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    document.getElementById('countdown').textContent = `${diffDays} days until ${userData[currentUser].tournament.name}`;
-}
-
-// Initialize app
-document.addEventListener('DOMContentLoaded', function () {
-    const currentUser = localStorage.getItem('currentUser');
-    const userData = getUserData();
-
-    if (currentUser && userData[currentUser]) {
-        if (userData[currentUser].tournament) {
-            showSection('home-section');
-            loadHomePage();
-        } else {
-            showSection('tournament-section');
-        }
-    } else {
-        showSection('login-section');
-    }
-});
+    updateSection
