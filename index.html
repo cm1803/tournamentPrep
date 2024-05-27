@@ -49,6 +49,42 @@
         <h1 id="greeting"></h1>
         <h2 id="countdown"></h2>
         <button id="logout-button">Log Out</button>
+        <div class="section" id="technical-section">
+            <h2>Technical</h2>
+            <p class="percentage" id="technical-percentage">0%</p>
+            <button onclick="openTaskModal('technical')">Add Task</button>
+        </div>
+        <div class="section" id="mental-section">
+            <h2>Mental</h2>
+            <p class="percentage" id="mental-percentage">0%</p>
+            <button onclick="openTaskModal('mental')">Add Task</button>
+        </div>
+        <div class="section" id="physical-section">
+            <h2>Physical</h2>
+            <p class="percentage" id="physical-percentage">0%</p>
+            <button onclick="openTaskModal('physical')">Add Task</button>
+        </div>
+        <div class="section" id="diet-section">
+            <h2>Diet</h2>
+            <p class="percentage" id="diet-percentage">0%</p>
+            <button onclick="openTaskModal('diet')">Add Task</button>
+        </div>
+    </div>
+
+    <div id="task-modal" class="hidden">
+        <h2>Add Task</h2>
+        <form id="task-form">
+            <label for="task-name">Task Name:</label>
+            <input type="text" id="task-name" required>
+            <label for="task-frequency">Frequency:</label>
+            <select id="task-frequency" required>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+            <button type="submit">Add Task</button>
+        </form>
+        <button onclick="closeTaskModal()">Cancel</button>
     </div>
 
     <script src="script.js"></script>
