@@ -30,8 +30,12 @@ document.getElementById('login-form').addEventListener('submit', function (event
 
     if (userData[username] && userData[username].password === password) {
         localStorage.setItem('currentUser', username);
-        showSection('home-section');
-        loadHomePage();
+        if (userData[username].tournament) {
+            showSection('home-section');
+            loadHomePage();
+        } else {
+            showSection('tournament-section');
+        }
     } else {
         alert('Invalid username or password');
     }
@@ -111,16 +115,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const userData = getUserData();
 
     if (currentUser && userData[currentUser]) {
-        const tournamentDate = new Date(userData[currentUser].tournament.date);
-        const currentDate = new Date();
-        const diffTime = Math.abs(currentDate - tournamentDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (!userData[currentUser].tournament || diffDays > 7) {
-            showSection('tournament-section');
-        } else {
+        if (userData[currentUser].tournament) {
             showSection('home-section');
             loadHomePage();
+        } else {
+            showSection('tournament-section');
         }
     } else {
         showSection('login-section');
